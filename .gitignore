@@ -1,0 +1,6 @@
+.env
+.gitattributes
+cookies.json
+credentials.json
+error_logs.txt
+
