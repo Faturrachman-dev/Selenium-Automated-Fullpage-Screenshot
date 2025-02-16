@@ -54,8 +54,8 @@ The project is organized into the following modules:
 2.  **Clone the repository:**
 
     ```bash
-    git clone <repository_url>
-    cd <repository_directory>
+    git clone https://github.com/Faturrachman-dev/Selenium-Automated-Fullpage-Screenshot.git
+    cd Selenium-Automated-Fullpage-Screenshot
     ```
 
 3.  **Install dependencies:**
