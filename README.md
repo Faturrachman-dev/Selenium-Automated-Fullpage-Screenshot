@@ -16,42 +16,23 @@ A robust Python automation tool that captures full-page screenshots of web pages
   - Efficient memory management
   - Smart timeouts and wait conditions
 
-- **Robust Error Handling**
-  - Comprehensive exception management
-  - Detailed logging system
-  - Multiple retry mechanisms
-  - Validation at critical points
-
 ## Installation
 
-1. **Prerequisites**
-   ```bash
-   # Required
-   - Python 3.7+
-   - Google Chrome browser
-   ```
+1.  **Prerequisites**
+    ```bash
+    # Required
+    - Python 3.7+
+    - Google Chrome browser
+    ```
 
-2. **Clone and Setup**
-   ```bash
-   git clone https://github.com/yourusername/selenium-automated-fullpage-screenshot.git
-   cd selenium-automated-fullpage-screenshot
-   pip install -r requirements.txt
-   ```
-
-2.  **Clone the repository:**
-
+2.  **Clone and Setup**
     ```bash
     git clone <repository_url>
     cd <repository_directory>
-    ```
-
-3.  **Install dependencies:**
-
-    ```bash
     pip install -r requirements.txt
     ```
 
-4.  **Configure environment variables:**
+3.  **Configure environment variables:**
 
     Create a `.env` file in the project's root directory and add the following variables:
 
@@ -60,71 +41,45 @@ A robust Python automation tool that captures full-page screenshots of web pages
     FOLDER_ID=<your_google_drive_folder_id>
     URL_RANGE=<range_containing_urls>  # e.g., 'Sheet1!A2:A'
     CHROME_PATH=<optional_path_to_chrome_executable>
+    COOKIES_PATH=cookies.json # Path to cookies.json
     ```
 
     Replace the placeholders with your actual values.  The `CHROME_PATH` is optional, but can be used to specify a specific Chrome installation.  The script will attempt to auto-detect Chrome if this is not provided.
 
-5.  **Place `cookies.json`:**
+4.  **Place `cookies.json`:**
 
-    If you need to access websites that require login, create a `cookies.json` file in the project's root directory containing the necessary cookies.  The format of this file should be a JSON array of cookie objects, as shown in the provided `cookies.json` example.
+    If you need to access websites that require login, create a `cookies.json` file in the project's root directory containing the necessary cookies.  The format of this file should be a JSON array of cookie objects.
 
-6. **Share Google Drive Folder and Google Sheet:**
-    * Share the Google Drive folder with the service account email address (found in `credentials.json`). Give the service account "Editor" access.
-    * Share the Google Sheet with the service account email address. Give the service account "Editor" access.
-3. **Environment Setup**
-   Create a `.env` file:
-   ```env
-   CHROME_PATH=C:\Program Files\Google\Chrome\Application\chrome.exe
-   SCREENSHOTS_DIR=screenshots
-   ```
+    **How to get `cookies.json`:**
 
-## Usage
+    1.  Install a cookie editor extension in your Chrome browser (e.g., "Cookie Editor").
+    2.  Log in to the website you need to take screenshots of.
+    3.  Open the cookie editor extension.
+    4.  Export the cookies in JSON format and save the file as `cookies.json` in the project's root directory.
 
-```python
-from utils.selenium_utils import setup_driver, capture_full_page_screenshot, close_driver
+5.  **Place `credentials.json`:**
 
-# Initialize driver
-driver = setup_driver()
+    You need to set up Google Cloud Project to get the `credentials.json` file.
 
-try:
-    # Capture screenshot
-    page_title = capture_full_page_screenshot(
-        driver=driver,
-        url="https://example.com",
-        output_path="screenshots/example.png"
-    )
-    print(f"Captured: {page_title}")
-finally:
-    close_driver(driver)
-```
+    **How to get `credentials.json`:**
 
-## Technical Details
+    1.  Go to [Google Cloud Console](https://console.cloud.google.com/).
+    2.  Create a new project or select an existing one.
+    3.  Enable the **Google Drive API** and **Google Sheets API** for your project.
+    4.  Go to "Credentials" in the left sidebar.
+    5.  Click "Create Credentials" and choose "Service account".
+    6.  Give your service account a name and click "Create and Continue".
+    7.  Grant your service account the "Editor" role under "Grant this service account access to project (optional)" and click "Continue".
+    8.  Click "Done".
+    9.  Click on the service account email address you just created.
+    10. Go to the "Keys" tab.
+    11. Click "Add Key" and choose "Create new key".
+    12. Select JSON as the key type and click "Create".
+    13. Download the `credentials.json` file and place it in the project's root directory.
 
-### Screenshot Capture Process
-
-1. **Page Preparation**
-   - Table-based layout optimization
-   - Lazy image loading handling
-   - Fixed element management
-
-2. **Dimension Calculation**
-   - Multiple viewport metrics
-   - Padding for safety margins
-   - Dynamic content consideration
-
-3. **Content Loading**
-   - Progressive scrolling
-   - Dynamic wait calculations
-   - Element visibility checks
-
-### Browser Configuration
-
-```python
-options = Options()
-options.add_argument('--headless=new')
-options.add_argument('--no-sandbox')
-# ... additional optimizations
-```
+6.  **Share Google Drive Folder and Google Sheet:**
+    *   Share the Google Drive folder with the service account email address (found in `credentials.json`). Give the service account "Editor" access.
+    *   Share the Google Sheet with the service account email address. Give the service account "Editor" access.
 
 ## Project Structure
 
@@ -139,44 +94,6 @@ selenium-automated-fullpage-screenshot/
 └── README.md              # Documentation
 ```
 
-## Dependencies
-
-```
-selenium==4.10.0
-python-dotenv==1.0.0
-webdriver_manager
-```
-m
-## Error Handling
-
-The tool includes comprehensive error handling for common scenarios:
-- Network issues
-- Dynamic content loading failures
-- Browser compatibility problems
-- Resource limitations
-
-## Logging
-
-Detailed logging is available in `error_logs.txt`:
-- Operation timestamps
-- Error tracebacks
-- Performance metrics
-- Status updates
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
-
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgments
-
-- Selenium WebDriver team
-- Chrome DevTools Protocol documentation
-- WebDriver Manager project

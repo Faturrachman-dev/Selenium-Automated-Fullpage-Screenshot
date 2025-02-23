@@ -1,8 +1,22 @@
-_pycache_
-.venv
+# Python bytecode files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+.venv/
+
+# Environment variables and configuration
 .env
+.gitignore
 .gitattributes
+
+# Project-specific files
+.cursorignore
 cookies.json
 credentials.json
 error_logs.txt
 
+# Explicitly ignore all pycache in utils directory
+utils/__pycache__/
+utils/**/*.pyc

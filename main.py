@@ -1,4 +1,4 @@
-mimport os
+import os
 import logging
 import time
 from datetime import datetime
@@ -19,8 +19,8 @@ logging.basicConfig(
 
 # Configuration from environment variables
 SPREADSHEET_ID = os.getenv('SPREADSHEET_ID')
-URL_RANGE = os.getenv('SHEET_RANGE')
-FOLDER_ID = os.getenv('DRIVE_FOLDER_ID')
+URL_RANGE = os.getenv('URL_RANGE')
+FOLDER_ID = os.getenv('FOLDER_ID')
 COOKIES_PATH = os.getenv('COOKIES_PATH')
 SCREENSHOTS_DIR = os.getenv('SCREENSHOTS_DIR', 'screenshots')
 
@@ -109,8 +109,18 @@ def main():
     driver = None
     try:
         # Validate environment variables
-        if not all([SPREADSHEET_ID, URL_RANGE, FOLDER_ID, COOKIES_PATH]):
-            raise Exception("Missing required environment variables. Please check your .env file.")
+        missing_vars = []
+        if not SPREADSHEET_ID:
+            missing_vars.append("SPREADSHEET_ID")
+        if not URL_RANGE:
+            missing_vars.append("URL_RANGE")
+        if not FOLDER_ID:
+            missing_vars.append("FOLDER_ID")
+        if not COOKIES_PATH:
+            missing_vars.append("COOKIES_PATH")
+
+        if missing_vars:
+            raise Exception(f"Missing required environment variables: {', '.join(missing_vars)}. Please check your .env file.")
             
         print("\n🔄 Initializing services...")
         drive_service = gdrive_utils.get_drive_service()
