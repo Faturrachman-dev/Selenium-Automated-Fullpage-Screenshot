@@ -1,6 +1,24 @@
+<<<<<<< Updated upstream
 selenium==4.16.0
 google-api-python-client==2.108.0
 google-auth-oauthlib==1.1.0
 google-auth-httplib2==0.1.1
 python-dotenv==1.0.0
 webdriver-manager==4.0.1
+=======
+# Core dependencies for the project
+selenium==4.10.0
+google-api-python-client==2.92.0
+google-auth==2.23.0
+google-auth-oauthlib==1.0.0
+google-auth-httplib2==0.1.0
+python-dotenv==1.0.0
+requests==2.31.0
+webdriver_manager
+
+# Optional dependencies for development and testing
+pytest==8.3.4
+black==25.1.0
+isort==6.0.0
+pylint==3.3.4
+>>>>>>> Stashed changes

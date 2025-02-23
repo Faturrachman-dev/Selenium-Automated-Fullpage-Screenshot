@@ -1,56 +1,44 @@
-# Automated Full-Page Screenshot Capture, Upload, and Metadata Recording
+# Selenium Automated Full-page Screenshot
 
-This project automates the process of capturing full-page screenshots of web pages, uploading them to Google Drive, and updating a Google Sheet with relevant metadata. It leverages Selenium for web automation, Google Drive API for file storage, and Google Sheets API for data management. The project emphasizes robust error handling, performance optimization, and maintainability.
+A robust Python automation tool that captures full-page screenshots of web pages, with special handling for dynamic content and lazy-loaded elements. Built with Selenium WebDriver and optimized for reliability.
 
-## Features
+## Key Features
 
-*   **Full-Page Screenshot Capture:** Captures entire web pages, including content below the fold, using Selenium and optimized techniques for handling dynamic content and lazy-loaded images.
-*   **Google Drive Integration:** Uploads screenshots to a specified Google Drive folder using the Google Drive API (v3).  Handles authentication via service account credentials.  Includes robust error handling, retries, and duplicate file management.
-*   **Google Sheets Integration:** Reads URLs from a Google Sheet and updates corresponding cells with screenshot metadata (file ID, web view link) using the Google Sheets API (v4).  Authenticates using service account credentials.
-*   **Cookie Management:** Loads cookies from a `cookies.json` file to maintain session state and handle authentication for websites requiring login.  Uses optimized domain handling and the Chrome DevTools Protocol (CDP) for efficient cookie setting.
-*   **Performance Optimization:** Employs various techniques to enhance performance, including:
-    *   Headless Chrome WebDriver.
-    *   Optimized WebDriver flags (disabling GPU, software rasterization, etc.).
-    *   Eager page load strategy.
-    *   Network and caching optimizations.
-    *   Optimized timeouts.
-    *   Resumable uploads with optimized chunk sizes for Google Drive.
-    *   Batch operations where possible.
-*   **Robust Error Handling:** Includes comprehensive error handling and logging throughout the process, with specific checks for common issues (e.g., Google API permission errors, network issues, invalid URLs).
-*   **Duplicate File Handling:** Checks for existing files with the same name in the target Google Drive folder and deletes them before uploading to prevent duplicates.
-*   **URL Tracking (Conceptual):** Includes a `URLTracker` class (not fully integrated in `main.py`) designed to manage processed URLs and their metadata, preventing redundant processing.
-*   **Detailed Logging:** Records events, errors, and progress to a log file (`error_logs.txt`) for debugging and monitoring.
-*   **Dynamic Chrome Version Handling:** Dynamically detects the installed Chrome browser's version for WebDriver compatibility.
-*   **Multiple Screenshot Capture Methods:** Implements fallback mechanisms for screenshot capture, including capturing the `body` element, using Selenium's `save_screenshot`, and a JavaScript-based canvas capture method.
-*   **Progress Reporting:** Provides detailed progress reporting during Google Drive uploads, including percentage completion, upload speed, and estimated time remaining.
+- **Reliable Full-page Screenshots**
+  - Handles dynamic content and lazy-loaded images
+  - Optimized layout calculations for accurate dimensions
+  - Multiple fallback capture methods
+  - Smart scroll handling for content loading
 
-## Project Structure
+- **Performance Optimizations**
+  - Headless Chrome with optimized flags
+  - Network and resource handling optimizations
+  - Efficient memory management
+  - Smart timeouts and wait conditions
 
-The project is organized into the following modules:
+- **Robust Error Handling**
+  - Comprehensive exception management
+  - Detailed logging system
+  - Multiple retry mechanisms
+  - Validation at critical points
 
-*   `main.py`: The main script that orchestrates the entire process.
-*   `utils/`:
-    *   `selenium_utils.py`: Contains functions for setting up the Selenium WebDriver, loading cookies, and capturing screenshots.
-    *   `gdrive_utils.py`: Handles interactions with the Google Drive API, including authentication, file uploads, and metadata retrieval.
-    *   `gsheet_utils.py`: Manages interactions with the Google Sheets API, including reading URLs and updating cell values.
-    *   `url_tracker.py`: (Conceptual) Provides a class for tracking processed URLs and their metadata.
-*   `credentials.json`: Contains service account credentials for Google API authentication.
-*   `cookies.json`: Stores cookies for maintaining session state.
-*   `.env`: Stores environment variables, such as the Google Sheet ID, folder ID, and URL range.
-*   `error_logs.txt`: Log file for recording errors and events.
+## Installation
 
-## Setup and Installation
+1. **Prerequisites**
+   ```bash
+   # Required
+   - Python 3.7+
+   - Google Chrome browser
+   ```
 
-1.  **Prerequisites:**
-    *   Python 3.7+
-    *   Google Chrome browser
-    *   A Google Cloud Platform project with the following APIs enabled:
-        *   Google Drive API
-        *   Google Sheets API
-    *   A service account with access to the Google Drive and Google Sheets APIs. Download the service account credentials as `credentials.json` and place it in the project's root directory.
-    *   A Google Sheet containing a list of URLs to process.
-    *   A Google Drive folder where screenshots will be uploaded.
+2. **Clone and Setup**
+   ```bash
+   git clone https://github.com/yourusername/selenium-automated-fullpage-screenshot.git
+   cd selenium-automated-fullpage-screenshot
+   pip install -r requirements.txt
+   ```
 
+<<<<<<< Updated upstream
 2.  **Clone the repository:**
 
     ```bash
@@ -84,41 +72,114 @@ The project is organized into the following modules:
 6. **Share Google Drive Folder and Google Sheet:**
     * Share the Google Drive folder with the service account email address (found in `credentials.json`). Give the service account "Editor" access.
     * Share the Google Sheet with the service account email address. Give the service account "Editor" access.
+=======
+3. **Environment Setup**
+   Create a `.env` file:
+   ```env
+   CHROME_PATH=C:\Program Files\Google\Chrome\Application\chrome.exe
+   SCREENSHOTS_DIR=screenshots
+   ```
+>>>>>>> Stashed changes
 
 ## Usage
 
-1.  **Ensure your Google Sheet is populated with URLs in the specified range.**
+```python
+from utils.selenium_utils import setup_driver, capture_full_page_screenshot, close_driver
 
-2.  **Run the `main.py` script:**
+# Initialize driver
+driver = setup_driver()
 
-    ```bash
-    python main.py
-    ```
+try:
+    # Capture screenshot
+    page_title = capture_full_page_screenshot(
+        driver=driver,
+        url="https://example.com",
+        output_path="screenshots/example.png"
+    )
+    print(f"Captured: {page_title}")
+finally:
+    close_driver(driver)
+```
 
-The script will read URLs from the Google Sheet, capture screenshots, upload them to Google Drive, and update the sheet with the screenshot links. Progress and errors will be logged to the console and the `error_logs.txt` file.
+## Technical Details
 
-## Troubleshooting
+### Screenshot Capture Process
 
-*   **Service account lacks necessary permissions:** If you encounter a 403 error, ensure that the Google Drive folder and Google Sheet are shared with the service account email address (found in `credentials.json`) with "Editor" permissions.
-*   **Folder not found or not accessible:** Verify the `FOLDER_ID` in your `.env` file is correct and that the service account has access to the folder.
-*   **Chrome browser not found:** If the script cannot find Chrome, either install it in a standard location or specify the path to the Chrome executable using the `CHROME_PATH` environment variable.
-*   **Invalid cookies format:** Ensure that the `cookies.json` file is correctly formatted as a JSON array of cookie objects.
-*   **Other errors:** Check the `error_logs.txt` file for detailed error messages and debugging information.
+1. **Page Preparation**
+   - Table-based layout optimization
+   - Lazy image loading handling
+   - Fixed element management
 
-## Future Improvements
+2. **Dimension Calculation**
+   - Multiple viewport metrics
+   - Padding for safety margins
+   - Dynamic content consideration
 
-*   **Full Integration of `URLTracker`:** Integrate the `URLTracker` class into `main.py` to prevent reprocessing of URLs.
-*   **Asynchronous Processing:** Implement asynchronous processing (e.g., using `asyncio`) to improve performance, especially when handling a large number of URLs.
-*   **Configurable Screenshot Options:** Allow users to configure screenshot options (e.g., image format, quality) via command-line arguments or a configuration file.
-*   **More Flexible Cookie Handling:** Implement more flexible cookie handling, such as allowing users to specify cookies via command-line arguments or a configuration file.
-*   **GUI:** Develop a graphical user interface (GUI) to make the tool more user-friendly.
-*   **Testing:** Add unit and integration tests to improve code quality and maintainability.
-*   **Dockerization:** Containerize the application using Docker for easier deployment and portability.
+3. **Content Loading**
+   - Progressive scrolling
+   - Dynamic wait calculations
+   - Element visibility checks
+
+### Browser Configuration
+
+```python
+options = Options()
+options.add_argument('--headless=new')
+options.add_argument('--no-sandbox')
+# ... additional optimizations
+```
+
+## Project Structure
+
+```
+selenium-automated-fullpage-screenshot/
+├── utils/
+│   ├── selenium_utils.py    # Core screenshot functionality
+│   └── __init__.py
+├── screenshots/             # Output directory
+├── .env                    # Environment configuration
+├── requirements.txt        # Dependencies
+└── README.md              # Documentation
+```
+
+## Dependencies
+
+```
+selenium==4.10.0
+python-dotenv==1.0.0
+webdriver_manager
+```
+
+## Error Handling
+
+The tool includes comprehensive error handling for common scenarios:
+- Network issues
+- Dynamic content loading failures
+- Browser compatibility problems
+- Resource limitations
+
+## Logging
+
+Detailed logging is available in `error_logs.txt`:
+- Operation timestamps
+- Error tracebacks
+- Performance metrics
+- Status updates
 
 ## Contributing
 
-Contributions are welcome! Please submit pull requests or open issues to discuss proposed changes.
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
 
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- Selenium WebDriver team
+- Chrome DevTools Protocol documentation
+- WebDriver Manager project

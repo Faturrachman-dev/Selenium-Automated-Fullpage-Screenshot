@@ -3,13 +3,22 @@
     └── 📁screenshots
     └── 📁utils
         └── __init__.py
+        └── 📁__pycache__
+            └── __init__.cpython-311.pyc
+            └── __init__.cpython-313.pyc
+            
+            └── gdrive_utils.cpython-311.pyc
+            └── gdrive_utils.cpython-313.pyc
+            └── gsheet_utils.cpython-311.pyc
+            └── gsheet_utils.cpython-313.pyc
+            └── selenium_utils.cpython-311.pyc
+            └── selenium_utils.cpython-313.pyc
         └── gdrive_utils.py
         └── gsheet_utils.py
         └── selenium_utils.py
         └── url_tracker.py
     └── .env
     └── .gitignore
-    └── a.md
     └── ARCHITECTURE.md
     └── cookies.json
     └── credentials.json

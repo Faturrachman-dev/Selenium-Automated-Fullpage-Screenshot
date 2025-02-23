@@ -9,8 +9,6 @@ import os
 import logging
 import time
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.common.exceptions import TimeoutException
-import math
 
 # Clear previous logs
 if os.path.exists('error_logs.txt'):
@@ -40,28 +38,58 @@ def setup_driver():
     """Setup Chrome driver with optimized settings for performance and reliability"""
     try:
         print("\n🔍 Setting up Chrome WebDriver...")
+        # Check if Chrome is installed
+        chrome_paths = [
+            r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+            r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+            r"F:\Program Files\Chrome\chrome.exe",
+            os.environ.get("CHROME_PATH")
+        ]
         
+        chrome_path = None
+        for path in chrome_paths:
+            if path and os.path.exists(path):
+                chrome_path = path
+                print(f"✅ Chrome found at: {path}")
+                logging.info(f"Chrome found at: {path}")
+                break
+                
+        if not chrome_path:
+            raise Exception("Chrome browser not found. Please install Google Chrome and try again.")
+
         options = Options()
+        
+        # Essential flags for headless operation
         options.add_argument('--headless=new')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
+        
+        # Performance optimization flags
         options.add_argument('--disable-gpu')
         options.add_argument('--disable-software-rasterizer')
         options.add_argument('--disable-extensions')
         options.add_argument('--disable-notifications')
-        options.add_argument('--dns-prefetch-disable')
-        options.add_argument('--disable-background-networking')
-        options.add_argument('--proxy-server="direct://"')
-        options.add_argument('--proxy-bypass-list=*')
+        
+        # Network optimization flags
+        options.add_argument('--dns-prefetch-disable')  # Disable DNS prefetching
+        options.add_argument('--disable-background-networking')  # Disable background network tasks
+        options.add_argument('--proxy-server="direct://"')  # Direct connection
+        options.add_argument('--proxy-bypass-list=*')  # Bypass proxy for all hosts
+        
+        # Memory optimization
         options.add_argument('--disable-dev-tools')
         options.add_argument('--disable-browser-side-navigation')
         options.add_argument('--disable-site-isolation-trials')
-        options.page_load_strategy = 'eager'
+        
+        # Set reasonable page load strategy
+        options.page_load_strategy = 'eager'  # Don't wait for all resources
+        
+        # Additional preferences for better performance
         options.add_experimental_option('prefs', {
             'profile.default_content_setting_values.notifications': 2,
             'profile.default_content_settings.popups': 0,
             'profile.password_manager_enabled': False,
-            'profile.managed_default_content_settings.images': 1,
+            'profile.managed_default_content_settings.images': 1,  # Load images but optimize
             'profile.default_content_setting_values.cookies': 1,
             'disk-cache-size': 4096,
             'network.http.pipelining': True,
@@ -70,16 +98,19 @@ def setup_driver():
         })
         
         print("🔧 Setting up ChromeDriver...")
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        driver = webdriver.Chrome(options=options)
         
-        driver.set_page_load_timeout(20)
-        driver.implicitly_wait(5)
+        # Configure optimized timeouts
+        driver.set_page_load_timeout(20)  # Reduced from 30
+        driver.implicitly_wait(5)  # Reduced from 10
         
+        # Enable performance logging
         driver.execute_cdp_cmd('Network.enable', {
             'maxTotalBufferSize': 100000000,
             'maxResourceBufferSize': 100000000
         })
         
+        # Enable request interception for optimization
         driver.execute_cdp_cmd('Network.setBypassServiceWorker', {'bypass': True})
         
         print("✅ Chrome WebDriver setup complete!\n")
@@ -160,109 +191,133 @@ def capture_full_page_screenshot(driver, url, output_path):
     """Enhanced full-page screenshot capture with reliable height calculation"""
     try:
         print(f"🌐 Navigating to URL: {url}")
-        logging.info(f"Navigating to URL: {url}")
         driver.get(url)
         
         print("⏳ Waiting for page load...")
-        try:
-            WebDriverWait(driver, 30).until(
-                lambda d: d.execute_script('return document.readyState') == 'complete'
-            )
-            print("✅ Page loaded successfully")
-            logging.info("Page loaded successfully")
-        except TimeoutException as e:
-            logging.error(f"Timeout while waiting for page to load: {url}", exc_info=True)
-            logging.info(f"Page title: {driver.title}")
-            logging.info(f"Current URL: {driver.current_url}")
-            raise
+        WebDriverWait(driver, 10).until(
+            lambda d: d.execute_script('return document.readyState') == 'complete'
+        )
         
-        # Wait for any dynamic content
-        time.sleep(2)
+        print("✅ Page loaded successfully")
         
-        # Prepare page layout
+        # Prepare page for screenshot by modifying layout
         print("📏 Preparing page layout...")
-        logging.info("Preparing page layout for screenshot")
         driver.execute_script("""
             // Set up the page for proper height calculation
             document.documentElement.style.display = 'table';
             document.documentElement.style.width = '100%';
             document.body.style.display = 'table-row';
             
-            // Force load lazy images
-            document.querySelectorAll('img[loading="lazy"]').forEach(img => {
-                img.loading = 'eager';
-                img.src = img.src;
-            });
+            // Force all images to load
+            const images = document.getElementsByTagName('img');
+            for(let img of images) {
+                if(img.loading === 'lazy') {
+                    img.loading = 'eager';
+                    img.src = img.src;
+                }
+            }
             
-            // Show collapsed elements and handle fixed positioning
-            document.querySelectorAll('.collapse').forEach(el => el.classList.add('show'));
-            document.querySelectorAll('*[style*="position: fixed"]').forEach(el => {
+            // Show all collapsed elements
+            const collapsedElements = document.querySelectorAll('.collapse');
+            collapsedElements.forEach(el => el.classList.add('show'));
+            
+            // Handle fixed elements except navigation
+            const fixedElements = document.querySelectorAll('*[style*="position: fixed"]');
+            fixedElements.forEach(el => {
                 if (!el.classList.contains('navigation-bar')) {
                     el.style.position = 'absolute';
                 }
             });
         """)
         
-        # Wait for layout changes
+        # Wait for layout changes to take effect
         time.sleep(1)
         
-        # Get page dimensions
+        # Get accurate page dimensions
         dimensions = driver.execute_script("""
             return {
-                width: Math.max(
-                    document.documentElement.scrollWidth,
-                    document.documentElement.offsetWidth,
-                    document.body.scrollWidth,
-                    document.body.offsetWidth
-                ) + 100,
                 height: Math.max(
                     document.documentElement.scrollHeight,
                     document.documentElement.offsetHeight,
+                    document.documentElement.clientHeight,
                     document.body.scrollHeight,
-                    document.body.offsetHeight
-                ) + 100
+                    document.body.offsetHeight,
+                    document.body.clientHeight
+                ),
+                width: Math.max(
+                    document.documentElement.scrollWidth,
+                    document.documentElement.offsetWidth,
+                    document.documentElement.clientWidth,
+                    document.body.scrollWidth,
+                    document.body.offsetWidth,
+                    document.body.clientWidth
+                )
             };
         """)
         
-        print(f"📐 Setting viewport size: {dimensions['width']}x{dimensions['height']} pixels")
-        logging.info(f"Setting viewport size: {dimensions['width']}x{dimensions['height']} pixels")
-        driver.set_window_size(dimensions['width'], dimensions['height'])
+        # Add padding to dimensions
+        total_width = dimensions['width'] + 100
+        total_height = dimensions['height'] + 100
         
-        # Wait for resize
+        print(f"📐 Setting viewport size: {total_width}x{total_height} pixels")
+        driver.set_window_size(total_width, total_height)
+        
+        # Wait for resize to take effect
         time.sleep(1)
         
         # Scroll through the page to trigger lazy loading
         print("🖱️ Loading all content...")
-        logging.info("Scrolling through the page to load all content")
         driver.execute_script("""
             const height = document.documentElement.scrollHeight;
-            const steps = Math.ceil(height / 1000);
+            const steps = Math.ceil(height / 1000); // One step per 1000px
             const stepSize = height / steps;
             
-            // Synchronous scrolling with setTimeout
-            for (let i = 0; i <= steps; i++) {
-                setTimeout(() => {
-                    window.scrollTo(0, i * stepSize);
-                }, i * 100);
+            for(let i = 0; i <= steps; i++) {
+                window.scrollTo(0, i * stepSize);
+                // Small pause between scrolls
+                new Promise(resolve => setTimeout(resolve, 100));
             }
-            setTimeout(() => window.scrollTo(0, 0), (steps + 1) * 100);
+            window.scrollTo(0, 0);
         """)
         
-        # Wait for scrolling to complete
-        time.sleep((math.ceil(driver.execute_script("return document.documentElement.scrollHeight") / 1000) + 1) * 0.1 + 1)
+        # Final wait for any dynamic content
+        time.sleep(1)
         
         print("📸 Capturing screenshot...")
-        logging.info("Capturing screenshot")
         try:
+            # Try capturing the body element first (most reliable method)
             body = driver.find_element(By.TAG_NAME, 'body')
             body.screenshot(output_path)
             print("✅ Captured using body element method")
-            logging.info("Screenshot captured using body element method")
         except Exception as e:
-            logging.warning(f"Body capture failed, using full page method: {str(e)}")
-            driver.save_screenshot(output_path)
-            print("✅ Captured using full page method")
-            logging.info("Screenshot captured using full page method")
+            print(f"⚠️ Body capture failed, trying full page method: {str(e)}")
+            try:
+                # Fallback to full page screenshot
+                driver.save_screenshot(output_path)
+                print("✅ Captured using full page method")
+            except Exception as e2:
+                print(f"⚠️ Full page capture failed, trying alternative method: {str(e2)}")
+                # Final fallback using JavaScript
+                screenshot = driver.execute_script("""
+                    const canvas = document.createElement('canvas');
+                    const context = canvas.getContext('2d');
+                    const html = document.documentElement;
+                    
+                    canvas.width = html.scrollWidth;
+                    canvas.height = html.scrollHeight;
+                    
+                    // Draw the viewport
+                    context.drawWindow(window, 0, 0, canvas.width, canvas.height, 'rgb(255,255,255)');
+                    
+                    return canvas.toDataURL('image/png');
+                """)
+                
+                # Convert base64 to image and save
+                import base64
+                img_data = base64.b64decode(screenshot.split(',')[1])
+                with open(output_path, 'wb') as f:
+                    f.write(img_data)
+                print("✅ Captured using JavaScript method")
         
         page_title = driver.title
         print(f"✅ Screenshot captured successfully: {page_title}")
@@ -270,9 +325,8 @@ def capture_full_page_screenshot(driver, url, output_path):
         return page_title
         
     except Exception as e:
-        error_msg = f"❌ Screenshot capture failed for {url}: {str(e)}"
-        print(error_msg)
-        logging.error(error_msg, exc_info=True)
+        print(f"❌ Screenshot capture failed: {str(e)}")
+        logging.error(f"Screenshot capture failed for {url}: {str(e)}")
         raise
 
 def close_driver(driver):

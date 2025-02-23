@@ -1,3 +1,6 @@
+__pycache__
+_pycache_
+.venv
 .env
 .gitattributes
 cookies.json
