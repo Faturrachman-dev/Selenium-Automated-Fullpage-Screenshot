@@ -38,7 +38,6 @@ A robust Python automation tool that captures full-page screenshots of web pages
    pip install -r requirements.txt
    ```
 
-<<<<<<< Updated upstream
 2.  **Clone the repository:**
 
     ```bash
@@ -72,14 +71,12 @@ A robust Python automation tool that captures full-page screenshots of web pages
 6. **Share Google Drive Folder and Google Sheet:**
     * Share the Google Drive folder with the service account email address (found in `credentials.json`). Give the service account "Editor" access.
     * Share the Google Sheet with the service account email address. Give the service account "Editor" access.
-=======
 3. **Environment Setup**
    Create a `.env` file:
    ```env
    CHROME_PATH=C:\Program Files\Google\Chrome\Application\chrome.exe
    SCREENSHOTS_DIR=screenshots
    ```
->>>>>>> Stashed changes
 
 ## Usage
 
@@ -149,7 +146,7 @@ selenium==4.10.0
 python-dotenv==1.0.0
 webdriver_manager
 ```
-
+m
 ## Error Handling
 
 The tool includes comprehensive error handling for common scenarios:
