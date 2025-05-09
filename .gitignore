@@ -20,3 +20,6 @@ error_logs.txt
 # Explicitly ignore all pycache in utils directory
 utils/__pycache__/
 utils/**/*.pyc
+
+# Others
+screenshots/*

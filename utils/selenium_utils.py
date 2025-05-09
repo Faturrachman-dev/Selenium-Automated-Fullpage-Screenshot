@@ -11,6 +11,7 @@ import time
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.common.exceptions import TimeoutException
 import math
+import base64
 
 # Clear previous logs
 if os.path.exists('error_logs.txt'):
@@ -42,6 +43,7 @@ def setup_driver():
         print("\n🔍 Setting up Chrome WebDriver...")
         
         options = Options()
+        
         options.add_argument('--headless=new')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-dev-shm-usage')
@@ -176,93 +178,178 @@ def capture_full_page_screenshot(driver, url, output_path):
             logging.info(f"Current URL: {driver.current_url}")
             raise
         
-        # Wait for any dynamic content
-        time.sleep(2)
+        # Wait for any dynamic content (reverted to static)
+        print(f"⏳ Applying delay for dynamic content: 2.0s")
+        time.sleep(2.0)
         
-        # Prepare page layout
-        print("📏 Preparing page layout...")
-        logging.info("Preparing page layout for screenshot")
-        driver.execute_script("""
-            // Set up the page for proper height calculation
-            document.documentElement.style.display = 'table';
-            document.documentElement.style.width = '100%';
-            document.body.style.display = 'table-row';
+        # --- Start Conditional Screenshot Logic ---
+        MAX_DIRECT_SCREENSHOT_HEIGHT = 50000 # Threshold for using simpler screenshot method
+
+        # Get preliminary page dimensions to decide screenshot strategy
+        preliminary_height_script = "return Math.max(document.body.scrollHeight, document.documentElement.scrollHeight, document.body.offsetHeight, document.documentElement.offsetHeight);"
+        preliminary_height = driver.execute_script(preliminary_height_script)
+        preliminary_width_script = "return Math.max(document.body.scrollWidth, document.documentElement.scrollWidth, document.body.offsetWidth, document.documentElement.offsetWidth);"
+        preliminary_width = driver.execute_script(preliminary_width_script)
+
+        logging.info(f"Preliminary page dimensions: Width={preliminary_width}, Height={preliminary_height}")
+
+        if preliminary_height > 0 and preliminary_height <= MAX_DIRECT_SCREENSHOT_HEIGHT:
+            logging.info(f"Page height ({preliminary_height}px) is within direct screenshot limit. Attempting simpler capture.")
+            print(f"📏 Page height ({preliminary_height}px) allows for simpler screenshot method.")
             
-            // Force load lazy images
-            document.querySelectorAll('img[loading="lazy"]').forEach(img => {
+            # Prepare page (minimal version for direct screenshot)
+            driver.execute_script("""
+                document.querySelectorAll('img[loading="lazy"]').forEach(img => {{
+                    img.loading = 'eager';
+                    img.src = img.src;
+                }});
+                window.scrollTo(0, 0); // Ensure we are at the top
+            """)
+            time.sleep(1.0) # Allow lazy images to load and scroll to take effect
+
+            # Ensure full height is captured by setting window size appropriately
+            # Use a slightly larger height to be safe, but based on actual content
+            capture_width = preliminary_width + 100
+            capture_height = preliminary_height + 100 
+            print(f"📐 Setting window size for direct capture: {capture_width}x{capture_height}")
+            driver.set_window_size(capture_width, capture_height)
+            time.sleep(1.5) # Allow repaint and settle after resize
+
+            try:
+                body = driver.find_element(By.TAG_NAME, 'body')
+                body.screenshot(output_path)
+                logging.info("Screenshot captured using body element method (direct path).")
+                print("✅ Captured using direct body screenshot.")
+            except Exception as e_body_direct:
+                logging.warning(f"Direct body capture failed: {e_body_direct}. Falling back to driver.save_screenshot.")
+                driver.save_screenshot(output_path)
+                logging.info("Screenshot captured using driver.save_screenshot (direct path fallback).")
+                print("✅ Captured using direct driver.save_screenshot (fallback).")
+        else:
+            if preliminary_height == 0:
+                logging.warning(f"Preliminary height is 0 for {url}. Proceeding with CDP method as a fallback.")
+            logging.info(f"Page height ({preliminary_height}px) exceeds direct limit or is zero. Using robust CDP method.")
+            print(f"📏 Page height ({preliminary_height}px) requires robust CDP screenshot method.")
+
+            # --- Robust CDP Path (for very long pages) ---
+            print("📏 Preparing page layout for CDP...")
+            logging.info("Preparing page layout for CDP screenshot")
+            driver.execute_script(""" 
+                document.querySelectorAll('img[loading="lazy"]').forEach(img => {{
                 img.loading = 'eager';
                 img.src = img.src;
-            });
+                }});
+            """)
+            time.sleep(1.0) # delay for layout changes
+
+            # Set viewport for layout using MAX_VIEWPORT_HEIGHT_FOR_LAYOUT (user setting)
+            MAX_VIEWPORT_HEIGHT_FOR_LAYOUT = 45000 
+            layout_viewport_height = min(preliminary_height if preliminary_height > 0 else MAX_VIEWPORT_HEIGHT_FOR_LAYOUT, MAX_VIEWPORT_HEIGHT_FOR_LAYOUT)
+            layout_viewport_width = preliminary_width if preliminary_width > 0 else 1920
+
+            print(f"📐 Setting viewport for layout (CDP path): {layout_viewport_width + 100}x{layout_viewport_height + 100} pixels")
+            driver.set_window_size(layout_viewport_width + 100, layout_viewport_height + 100)
+            time.sleep(1.0) # resize delay
             
-            // Show collapsed elements and handle fixed positioning
-            document.querySelectorAll('.collapse').forEach(el => el.classList.add('show'));
-            document.querySelectorAll('*[style*="position: fixed"]').forEach(el => {
-                if (!el.classList.contains('navigation-bar')) {
-                    el.style.position = 'absolute';
+            print("🖱️ Loading all content by scrolling (CDP path)...")
+            driver.execute_script("""
+                const scrollableHeight = document.body.scrollHeight || document.documentElement.scrollHeight;
+                const viewportHeight = window.innerHeight;
+                const steps = Math.ceil(scrollableHeight / viewportHeight);
+                for (let i = 0; i <= steps; i++) {{
+                    setTimeout(() => {{
+                        window.scrollTo(0, i * viewportHeight);
+                    }}, i * 150);
+                }}
+                setTimeout(() => window.scrollTo(0, 0), (steps + 1) * 150 + 200);
+            """)
+            
+            scroll_steps_js = "return Math.ceil((document.body.scrollHeight || document.documentElement.scrollHeight) / window.innerHeight);"
+            num_scroll_steps = driver.execute_script(scroll_steps_js)
+            estimated_scroll_duration = (num_scroll_steps + 1) * 0.150 + 0.200
+            settle_time = 3.0
+            total_wait_for_scroll_and_settle = estimated_scroll_duration + settle_time
+            print(f"⏳ Applying delay for scrolling completion and page settling (CDP path): {total_wait_for_scroll_and_settle:.2f}s")
+            time.sleep(total_wait_for_scroll_and_settle)
+            
+            print("📸 Capturing screenshot using CDP Page.captureScreenshot...")
+            metrics = driver.execute_cdp_cmd("Page.getLayoutMetrics", {})
+            content_width = math.ceil(metrics['contentSize']['width'])
+            
+            # New JavaScript to find the bottom-most visible element's position
+            final_content_height_script = """
+                const BORDERLINE_NODE_TYPES = [
+                    Node.COMMENT_NODE, 
+                    Node.PROCESSING_INSTRUCTION_NODE, 
+                    Node.DOCUMENT_TYPE_NODE
+                ];
+                let allElements = Array.from(document.body.querySelectorAll(
+                    '*:not(script):not(style):not(noscript):not(meta):not(link):not(title)'
+                ));
+                let maxY = 0;
+
+                // Include body itself as a baseline, especially for pages with direct body styling or minimal content
+                if (document.body && (document.body.offsetHeight > 0 || document.body.offsetWidth > 0 || (typeof document.body.getClientRects === 'function' && document.body.getClientRects().length > 0))) {
+                  let bodyRect = document.body.getBoundingClientRect();
+                  maxY = Math.max(maxY, bodyRect.bottom + window.pageYOffset);
                 }
-            });
-        """)
-        
-        # Wait for layout changes
-        time.sleep(1)
-        
-        # Get page dimensions
-        dimensions = driver.execute_script("""
-            return {
-                width: Math.max(
-                    document.documentElement.scrollWidth,
-                    document.documentElement.offsetWidth,
-                    document.body.scrollWidth,
-                    document.body.offsetWidth
-                ) + 100,
-                height: Math.max(
-                    document.documentElement.scrollHeight,
-                    document.documentElement.offsetHeight,
-                    document.body.scrollHeight,
-                    document.body.offsetHeight
-                ) + 100
-            };
-        """)
-        
-        print(f"📐 Setting viewport size: {dimensions['width']}x{dimensions['height']} pixels")
-        logging.info(f"Setting viewport size: {dimensions['width']}x{dimensions['height']} pixels")
-        driver.set_window_size(dimensions['width'], dimensions['height'])
-        
-        # Wait for resize
-        time.sleep(1)
-        
-        # Scroll through the page to trigger lazy loading
-        print("🖱️ Loading all content...")
-        logging.info("Scrolling through the page to load all content")
-        driver.execute_script("""
-            const height = document.documentElement.scrollHeight;
-            const steps = Math.ceil(height / 1000);
-            const stepSize = height / steps;
-            
-            // Synchronous scrolling with setTimeout
-            for (let i = 0; i <= steps; i++) {
-                setTimeout(() => {
-                    window.scrollTo(0, i * stepSize);
-                }, i * 100);
+
+                allElements.forEach(el => {
+                  if (el && typeof el.getBoundingClientRect === 'function' && !BORDERLINE_NODE_TYPES.includes(el.nodeType)) {
+                    let elStyle = window.getComputedStyle(el);
+                    if (elStyle.display !== 'none' && elStyle.visibility !== 'hidden' && parseFloat(elStyle.opacity) > 0) {
+                        let rect = el.getBoundingClientRect();
+                        if (rect.width > 0 || rect.height > 0 || (typeof el.getClientRects === 'function' && el.getClientRects().length > 0)) {
+                             let elementBottom = rect.bottom + window.pageYOffset;
+                             if (elementBottom > maxY) {
+                                maxY = elementBottom;
+                             }
+                        }
+                    }
+                  }
+                });
+                // If no elements found or maxY is still 0, fallback to scrollHeight as a last resort.
+                if (maxY === 0) {
+                    maxY = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight);
+                }
+                return Math.ceil(maxY) + 50; // Add 50px buffer for safety (e.g., shadows, margins)
+            """
+            content_height = driver.execute_script(final_content_height_script)
+
+            if content_width == 0: content_width = layout_viewport_width
+            if content_height == 0: content_height = 600
+            print(f" CDP Full Page Dimensions: Width={content_width}, Height={content_height}")
+            screenshot_config = {
+                'format': 'png',
+                'captureBeyondViewport': True,
+                'clip': {
+                    'x': 0,
+                    'y': 0,
+                    'width': content_width,
+                    'height': content_height,
+                    'scale': 1
+                }
             }
-            setTimeout(() => window.scrollTo(0, 0), (steps + 1) * 100);
-        """)
-        
-        # Wait for scrolling to complete
-        time.sleep((math.ceil(driver.execute_script("return document.documentElement.scrollHeight") / 1000) + 1) * 0.1 + 1)
-        
-        print("📸 Capturing screenshot...")
-        logging.info("Capturing screenshot")
-        try:
-            body = driver.find_element(By.TAG_NAME, 'body')
-            body.screenshot(output_path)
-            print("✅ Captured using body element method")
-            logging.info("Screenshot captured using body element method")
-        except Exception as e:
-            logging.warning(f"Body capture failed, using full page method: {str(e)}")
-            driver.save_screenshot(output_path)
-            print("✅ Captured using full page method")
-            logging.info("Screenshot captured using full page method")
+            try:
+                res = driver.execute_cdp_cmd('Page.captureScreenshot', screenshot_config)
+                with open(output_path, 'wb') as f:
+                    f.write(base64.b64decode(res['data']))
+                print("✅ Captured using CDP Page.captureScreenshot")
+                logging.info("Screenshot captured using CDP Page.captureScreenshot")
+            except Exception as e_cdp:
+                logging.warning(f"CDP Page.captureScreenshot failed: {str(e_cdp)}. Falling back to body/save_screenshot.")
+                # Fallback mechanism if CDP Page.captureScreenshot fails
+                try:
+                    body = driver.find_element(By.TAG_NAME, 'body')
+                    body.screenshot(output_path)
+                    print("✅ Captured using body element method (CDP direct fallback)")
+                    logging.info("Screenshot captured using body element method (CDP direct fallback)")
+                except Exception as e_body_cdp_fallback:
+                    logging.warning(f"Body capture failed (CDP direct fallback), using driver.save_screenshot: {str(e_body_cdp_fallback)}")
+                    driver.save_screenshot(output_path)
+                    print("✅ Captured using driver.save_screenshot (CDP ultimate fallback)")
+                    logging.info("Screenshot captured using driver.save_screenshot (CDP ultimate fallback)")
+        # --- End Conditional Screenshot Logic ---
         
         page_title = driver.title
         print(f"✅ Screenshot captured successfully: {page_title}")

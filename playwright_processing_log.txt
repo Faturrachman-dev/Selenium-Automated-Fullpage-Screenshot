@@ -1,0 +1,314 @@
+2025-05-09 23:28:51,134 - INFO - --- Starting Playwright Processing ---
+2025-05-09 23:28:51,135 - INFO - Initializing Google services.
+2025-05-09 23:28:51,142 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-05-09 23:28:53,225 - INFO - Drive service initialized for: selenium-sheet@selenium-451811.iam.gserviceaccount.com
+2025-05-09 23:28:53,225 - INFO - Google Drive service initialized.
+2025-05-09 23:28:53,225 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-05-09 23:28:53,245 - INFO - Google Sheets service initialized.
+2025-05-09 23:28:53,246 - INFO - Initializing Playwright browser and context.
+2025-05-09 23:28:54,383 - INFO - Attempting to load cookies from: cookies.json
+2025-05-09 23:28:54,415 - WARNING - Cookie 'mp_f6fed94839d1c8aa9ad8a3bfa5e1dcf3_mixpanel' has sameSite=null and is not Secure. Defaulting sameSite to Lax for Playwright.
+2025-05-09 23:28:54,430 - INFO - Successfully loaded 6 cookies into Playwright context.
+2025-05-09 23:28:54,430 - INFO - Playwright browser and context initialized, cookies loaded if path was provided.
+2025-05-09 23:28:54,430 - INFO - Reading URLs from spreadsheet.
+2025-05-09 23:28:56,705 - INFO - Found 10 URLs to process.
+2025-05-09 23:28:56,706 - INFO - Processing URL (1/10): https://www.analyticsvidhya.com/blog/2024/07/ai-agent-frameworks/
+2025-05-09 23:28:57,092 - INFO - Attempting to capture screenshot for https://www.analyticsvidhya.com/blog/2024/07/ai-agent-frameworks/ with Playwright.
+2025-05-09 23:29:57,189 - ERROR - An error occurred with Playwright for https://www.analyticsvidhya.com/blog/2024/07/ai-agent-frameworks/: Page.goto: Timeout 60000ms exceeded.
+Call log:
+  - navigating to "https://www.analyticsvidhya.com/blog/2024/07/ai-agent-frameworks/", waiting until "networkidle"
+Traceback (most recent call last):
+  File "D:\Projects\personal-projects\development_Selenium-Automated-Fullpage-Screenshot\playwright_screenshot_test.py", line 151, in take_playwright_screenshot
+    page.goto(url, wait_until="networkidle", timeout=60000) # Increased timeout, wait for network idle
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\personal-projects\development_Selenium-Automated-Fullpage-Screenshot\.venv\Lib\site-packages\playwright\sync_api\_generated.py", line 9024, in goto
+    self._sync(
+  File "D:\Projects\personal-projects\development_Selenium-Automated-Fullpage-Screenshot\.venv\Lib\site-packages\playwright\_impl\_sync_base.py", line 115, in _sync
+    return task.result()
+           ^^^^^^^^^^^^^
+  File "D:\Projects\personal-projects\development_Selenium-Automated-Fullpage-Screenshot\.venv\Lib\site-packages\playwright\_impl\_page.py", line 552, in goto
+    return await self._main_frame.goto(**locals_to_params(locals()))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\personal-projects\development_Selenium-Automated-Fullpage-Screenshot\.venv\Lib\site-packages\playwright\_impl\_frame.py", line 145, in goto
+    await self._channel.send("goto", locals_to_params(locals()))
+  File "D:\Projects\personal-projects\development_Selenium-Automated-Fullpage-Screenshot\.venv\Lib\site-packages\playwright\_impl\_connection.py", line 61, in send
+    return await self._connection.wrap_api_call(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\personal-projects\development_Selenium-Automated-Fullpage-Screenshot\.venv\Lib\site-packages\playwright\_impl\_connection.py", line 528, in wrap_api_call
+    raise rewrite_error(error, f"{parsed_st['apiName']}: {error}") from None
+playwright._impl._errors.TimeoutError: Page.goto: Timeout 60000ms exceeded.
+Call log:
+  - navigating to "https://www.analyticsvidhya.com/blog/2024/07/ai-agent-frameworks/", waiting until "networkidle"
+
+2025-05-09 23:30:00,866 - INFO - Saved error page screenshot to screenshots\error_screenshot_20250509_232857_www.analyticsvidhya.com.png
+2025-05-09 23:30:00,880 - INFO - Closed page for https://www.analyticsvidhya.com/blog/2024/07/ai-agent-frameworks/
+2025-05-09 23:30:00,893 - ERROR - \u274c Failed to capture screenshot with Playwright for URL: https://www.analyticsvidhya.com/blog/2024/07/ai-agent-frameworks/
+2025-05-09 23:30:05,750 - INFO - Processing URL (2/10): https://www.analyticsvidhya.com/blog/2024/10/what-are-ai-agents/
+2025-05-09 23:30:06,123 - INFO - Attempting to capture screenshot for https://www.analyticsvidhya.com/blog/2024/10/what-are-ai-agents/ with Playwright.
+2025-05-09 23:30:08,320 - INFO - Navigated to https://www.analyticsvidhya.com/blog/2024/10/what-are-ai-agents/
+2025-05-09 23:30:08,443 - INFO - Clicked 'Accept all cookies' button.
+2025-05-09 23:30:09,957 - INFO - Playwright - Page dimensions: Width=1920, Height=12742
+2025-05-09 23:30:11,911 - INFO - Screenshot saved to screenshots\screenshot_20250509_233006_www.analyticsvidhya.com.png
+2025-05-09 23:30:11,954 - INFO - Closed page for https://www.analyticsvidhya.com/blog/2024/10/what-are-ai-agents/
+2025-05-09 23:30:11,954 - INFO - Playwright screenshot successful: screenshot_20250509_233006_www.analyticsvidhya.com.png
+2025-05-09 23:30:11,954 - INFO - Uploading screenshot_20250509_233006_www.analyticsvidhya.com.png to Google Drive.
+2025-05-09 23:30:12,605 - INFO - Successfully verified access to folder: AI-Agent
+2025-05-09 23:30:13,207 - INFO - Successfully verified access to folder: AI-Agent
+2025-05-09 23:30:18,696 - CRITICAL - \u274c Critical error in Playwright main processing: [WinError 32] The process cannot access the file because it is being used by another process: 'screenshots\\screenshot_20250509_233006_www.analyticsvidhya.com.png'
+Traceback (most recent call last):
+  File "D:\Projects\personal-projects\development_Selenium-Automated-Fullpage-Screenshot\playwright_screenshot_test.py", line 317, in main_playwright_processing
+    _file_id, web_link = gdrive_utils.upload_file(drive_service, screenshot_path, FOLDER_ID)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\personal-projects\development_Selenium-Automated-Fullpage-Screenshot\utils\gdrive_utils.py", line 166, in upload_file
+    status, response = request.next_chunk()
+                       ^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\personal-projects\development_Selenium-Automated-Fullpage-Screenshot\.venv\Lib\site-packages\googleapiclient\_helpers.py", line 130, in positional_wrapper
+    return wrapped(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\personal-projects\development_Selenium-Automated-Fullpage-Screenshot\.venv\Lib\site-packages\googleapiclient\http.py", line 1084, in next_chunk
+    resp, content = http.request(
+                    ^^^^^^^^^^^^^
+  File "D:\Projects\personal-projects\development_Selenium-Automated-Fullpage-Screenshot\.venv\Lib\site-packages\google_auth_httplib2.py", line 218, in request
+    response, content = self.http.request(
+                        ^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\personal-projects\development_Selenium-Automated-Fullpage-Screenshot\.venv\Lib\site-packages\httplib2\__init__.py", line 1724, in request
+    (response, content) = self._request(
+                          ^^^^^^^^^^^^^^
+  File "D:\Projects\personal-projects\development_Selenium-Automated-Fullpage-Screenshot\.venv\Lib\site-packages\httplib2\__init__.py", line 1444, in _request
+    (response, content) = self._conn_request(conn, request_uri, method, body, headers)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Projects\personal-projects\development_Selenium-Automated-Fullpage-Screenshot\.venv\Lib\site-packages\httplib2\__init__.py", line 1396, in _conn_request
+    response = conn.getresponse()
+               ^^^^^^^^^^^^^^^^^^
+  File "F:\Pythons\Python311\Lib\http\client.py", line 1390, in getresponse
+    response.begin()
+  File "F:\Pythons\Python311\Lib\http\client.py", line 325, in begin
+    version, status, reason = self._read_status()
+                              ^^^^^^^^^^^^^^^^^^^
+  File "F:\Pythons\Python311\Lib\http\client.py", line 286, in _read_status
+    line = str(self.fp.readline(_MAXLINE + 1), "iso-8859-1")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\Pythons\Python311\Lib\socket.py", line 706, in readinto
+    return self._sock.recv_into(b)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\Pythons\Python311\Lib\ssl.py", line 1314, in recv_into
+    return self.read(nbytes, buffer)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "F:\Pythons\Python311\Lib\ssl.py", line 1166, in read
+    return self._sslobj.read(len, buffer)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Projects\personal-projects\development_Selenium-Automated-Fullpage-Screenshot\playwright_screenshot_test.py", line 335, in main_playwright_processing
+    os.remove(screenshot_path)
+PermissionError: [WinError 32] The process cannot access the file because it is being used by another process: 'screenshots\\screenshot_20250509_233006_www.analyticsvidhya.com.png'
+2025-05-09 23:30:18,702 - INFO - --- Playwright Processing Ended ---
+2025-05-09 23:30:18,702 - INFO - Closing Playwright browser.
+2025-05-09 23:37:16,086 - INFO - --- Starting Playwright Processing ---
+2025-05-09 23:37:16,086 - INFO - Initializing Google services.
+2025-05-09 23:37:16,086 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-05-09 23:37:17,459 - INFO - Drive service initialized for: selenium-sheet@selenium-451811.iam.gserviceaccount.com
+2025-05-09 23:37:17,459 - INFO - Google Drive service initialized.
+2025-05-09 23:37:17,463 - INFO - file_cache is only supported with oauth2client<4.0.0
+2025-05-09 23:37:17,468 - INFO - Google Sheets service initialized.
+2025-05-09 23:37:17,469 - INFO - Initializing Playwright browser and context.
+2025-05-09 23:37:18,560 - INFO - Attempting to load cookies from: cookies.json
+2025-05-09 23:37:18,560 - WARNING - Cookie 'mp_f6fed94839d1c8aa9ad8a3bfa5e1dcf3_mixpanel' has sameSite=null and is not Secure. Defaulting sameSite to Lax for Playwright.
+2025-05-09 23:37:18,596 - INFO - Successfully loaded 6 cookies into Playwright context.
+2025-05-09 23:37:18,597 - INFO - Playwright browser and context initialized, cookies loaded if path was provided.
+2025-05-09 23:37:18,598 - INFO - Reading URLs from spreadsheet.
+2025-05-09 23:37:21,035 - INFO - Found 10 URLs to process.
+2025-05-09 23:37:21,035 - INFO - Processing URL (1/10): https://www.analyticsvidhya.com/blog/2024/07/ai-agent-frameworks/
+2025-05-09 23:37:21,435 - INFO - Attempting to capture screenshot for https://www.analyticsvidhya.com/blog/2024/07/ai-agent-frameworks/ with Playwright.
+2025-05-09 23:37:23,662 - INFO - Navigated to https://www.analyticsvidhya.com/blog/2024/07/ai-agent-frameworks/
+2025-05-09 23:37:23,829 - INFO - Clicked 'Accept all cookies' button.
+2025-05-09 23:37:25,364 - INFO - Playwright - Page dimensions: Width=1920, Height=26498
+2025-05-09 23:37:28,969 - INFO - Screenshot saved to screenshots\screenshot_20250509_233721_www.analyticsvidhya.com.png
+2025-05-09 23:37:28,992 - INFO - Closed page for https://www.analyticsvidhya.com/blog/2024/07/ai-agent-frameworks/
+2025-05-09 23:37:29,007 - INFO - Playwright screenshot successful: screenshot_20250509_233721_www.analyticsvidhya.com.png
+2025-05-09 23:37:29,007 - INFO - Uploading screenshot_20250509_233721_www.analyticsvidhya.com.png to Google Drive.
+2025-05-09 23:37:29,460 - INFO - Successfully verified access to folder: AI-Agent
+2025-05-09 23:37:30,878 - INFO - Successfully verified access to folder: AI-Agent
+2025-05-09 23:37:37,064 - INFO - File uploaded successfully: https://drive.google.com/file/d/1jZmLmRfPP2vUHcInMhC4Bcq68mCdn5gi/view?usp=drivesdk
+2025-05-09 23:37:37,064 - INFO - Uploaded screenshot_20250509_233721_www.analyticsvidhya.com.png to https://drive.google.com/file/d/1jZmLmRfPP2vUHcInMhC4Bcq68mCdn5gi/view?usp=drivesdk.
+2025-05-09 23:37:37,511 - INFO - Sheet updated successfully: 1 cells updated
+2025-05-09 23:37:37,511 - INFO - Sheet updated for https://www.analyticsvidhya.com/blog/2024/07/ai-agent-frameworks/ with https://drive.google.com/file/d/1jZmLmRfPP2vUHcInMhC4Bcq68mCdn5gi/view?usp=drivesdk.
+2025-05-09 23:37:37,511 - INFO - Cleaned up local screenshot: screenshots\screenshot_20250509_233721_www.analyticsvidhya.com.png
+2025-05-09 23:37:40,514 - INFO - Processing URL (2/10): https://www.analyticsvidhya.com/blog/2024/10/what-are-ai-agents/
+2025-05-09 23:37:40,853 - INFO - Attempting to capture screenshot for https://www.analyticsvidhya.com/blog/2024/10/what-are-ai-agents/ with Playwright.
+2025-05-09 23:37:42,027 - INFO - Navigated to https://www.analyticsvidhya.com/blog/2024/10/what-are-ai-agents/
+2025-05-09 23:37:47,077 - WARNING - Could not click cookie consent button (or it wasn't found): Page.wait_for_selector: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all cookies')") to be visible
+
+2025-05-09 23:37:47,422 - INFO - Playwright - Page dimensions: Width=1920, Height=12742
+2025-05-09 23:37:50,456 - INFO - Screenshot saved to screenshots\screenshot_20250509_233740_www.analyticsvidhya.com.png
+2025-05-09 23:37:50,479 - INFO - Closed page for https://www.analyticsvidhya.com/blog/2024/10/what-are-ai-agents/
+2025-05-09 23:37:50,479 - INFO - Playwright screenshot successful: screenshot_20250509_233740_www.analyticsvidhya.com.png
+2025-05-09 23:37:50,479 - INFO - Uploading screenshot_20250509_233740_www.analyticsvidhya.com.png to Google Drive.
+2025-05-09 23:37:50,881 - INFO - Successfully verified access to folder: AI-Agent
+2025-05-09 23:37:51,391 - INFO - Successfully verified access to folder: AI-Agent
+2025-05-09 23:37:56,731 - INFO - File uploaded successfully: https://drive.google.com/file/d/17zIriWRxyB95TibcA7KHWdBdt3zF72Pr/view?usp=drivesdk
+2025-05-09 23:37:56,731 - INFO - Uploaded screenshot_20250509_233740_www.analyticsvidhya.com.png to https://drive.google.com/file/d/17zIriWRxyB95TibcA7KHWdBdt3zF72Pr/view?usp=drivesdk.
+2025-05-09 23:37:57,283 - INFO - Sheet updated successfully: 1 cells updated
+2025-05-09 23:37:57,283 - INFO - Sheet updated for https://www.analyticsvidhya.com/blog/2024/10/what-are-ai-agents/ with https://drive.google.com/file/d/17zIriWRxyB95TibcA7KHWdBdt3zF72Pr/view?usp=drivesdk.
+2025-05-09 23:37:57,284 - INFO - Cleaned up local screenshot: screenshots\screenshot_20250509_233740_www.analyticsvidhya.com.png
+2025-05-09 23:38:00,285 - INFO - Processing URL (3/10): https://www.analyticsvidhya.com/blog/2024/12/ai-agent-trends/
+2025-05-09 23:38:00,933 - INFO - Attempting to capture screenshot for https://www.analyticsvidhya.com/blog/2024/12/ai-agent-trends/ with Playwright.
+2025-05-09 23:38:02,111 - INFO - Navigated to https://www.analyticsvidhya.com/blog/2024/12/ai-agent-trends/
+2025-05-09 23:38:07,126 - WARNING - Could not click cookie consent button (or it wasn't found): Page.wait_for_selector: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all cookies')") to be visible
+
+2025-05-09 23:38:07,146 - INFO - Playwright - Page dimensions: Width=1920, Height=17734
+2025-05-09 23:38:11,396 - INFO - Screenshot saved to screenshots\screenshot_20250509_233800_www.analyticsvidhya.com.png
+2025-05-09 23:38:11,415 - INFO - Closed page for https://www.analyticsvidhya.com/blog/2024/12/ai-agent-trends/
+2025-05-09 23:38:11,415 - INFO - Playwright screenshot successful: screenshot_20250509_233800_www.analyticsvidhya.com.png
+2025-05-09 23:38:11,415 - INFO - Uploading screenshot_20250509_233800_www.analyticsvidhya.com.png to Google Drive.
+2025-05-09 23:38:12,001 - INFO - Successfully verified access to folder: AI-Agent
+2025-05-09 23:38:12,526 - INFO - Successfully verified access to folder: AI-Agent
+2025-05-09 23:38:25,145 - INFO - File uploaded successfully: https://drive.google.com/file/d/1SDC7EC5Hk98BGwFffOQ2g9fUYusGF1_M/view?usp=drivesdk
+2025-05-09 23:38:25,145 - INFO - Uploaded screenshot_20250509_233800_www.analyticsvidhya.com.png to https://drive.google.com/file/d/1SDC7EC5Hk98BGwFffOQ2g9fUYusGF1_M/view?usp=drivesdk.
+2025-05-09 23:38:25,628 - INFO - Sheet updated successfully: 1 cells updated
+2025-05-09 23:38:25,628 - INFO - Sheet updated for https://www.analyticsvidhya.com/blog/2024/12/ai-agent-trends/ with https://drive.google.com/file/d/1SDC7EC5Hk98BGwFffOQ2g9fUYusGF1_M/view?usp=drivesdk.
+2025-05-09 23:38:25,629 - INFO - Cleaned up local screenshot: screenshots\screenshot_20250509_233800_www.analyticsvidhya.com.png
+2025-05-09 23:38:28,631 - INFO - Processing URL (4/10): https://www.analyticsvidhya.com/blog/2024/10/learning-path-for-ai-agents/
+2025-05-09 23:38:29,286 - INFO - Attempting to capture screenshot for https://www.analyticsvidhya.com/blog/2024/10/learning-path-for-ai-agents/ with Playwright.
+2025-05-09 23:38:30,331 - INFO - Navigated to https://www.analyticsvidhya.com/blog/2024/10/learning-path-for-ai-agents/
+2025-05-09 23:38:35,351 - WARNING - Could not click cookie consent button (or it wasn't found): Page.wait_for_selector: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all cookies')") to be visible
+
+2025-05-09 23:38:35,368 - INFO - Playwright - Page dimensions: Width=1920, Height=30157
+2025-05-09 23:38:41,338 - INFO - Screenshot saved to screenshots\screenshot_20250509_233829_www.analyticsvidhya.com.png
+2025-05-09 23:38:41,351 - INFO - Closed page for https://www.analyticsvidhya.com/blog/2024/10/learning-path-for-ai-agents/
+2025-05-09 23:38:41,368 - INFO - Playwright screenshot successful: screenshot_20250509_233829_www.analyticsvidhya.com.png
+2025-05-09 23:38:41,368 - INFO - Uploading screenshot_20250509_233829_www.analyticsvidhya.com.png to Google Drive.
+2025-05-09 23:38:41,736 - INFO - Successfully verified access to folder: AI-Agent
+2025-05-09 23:38:42,098 - INFO - Successfully verified access to folder: AI-Agent
+2025-05-09 23:38:48,047 - INFO - File uploaded successfully: https://drive.google.com/file/d/1OTWP-v70Bal6_z5AplfDsD_aMDucI1Hf/view?usp=drivesdk
+2025-05-09 23:38:48,048 - INFO - Uploaded screenshot_20250509_233829_www.analyticsvidhya.com.png to https://drive.google.com/file/d/1OTWP-v70Bal6_z5AplfDsD_aMDucI1Hf/view?usp=drivesdk.
+2025-05-09 23:38:48,701 - INFO - Sheet updated successfully: 1 cells updated
+2025-05-09 23:38:48,701 - INFO - Sheet updated for https://www.analyticsvidhya.com/blog/2024/10/learning-path-for-ai-agents/ with https://drive.google.com/file/d/1OTWP-v70Bal6_z5AplfDsD_aMDucI1Hf/view?usp=drivesdk.
+2025-05-09 23:38:48,703 - INFO - Cleaned up local screenshot: screenshots\screenshot_20250509_233829_www.analyticsvidhya.com.png
+2025-05-09 23:38:51,705 - INFO - Processing URL (5/10): https://www.analyticsvidhya.com/blog/2025/05/computer-use-agents/
+2025-05-09 23:38:52,058 - INFO - Attempting to capture screenshot for https://www.analyticsvidhya.com/blog/2025/05/computer-use-agents/ with Playwright.
+2025-05-09 23:38:53,554 - INFO - Navigated to https://www.analyticsvidhya.com/blog/2025/05/computer-use-agents/
+2025-05-09 23:38:58,590 - WARNING - Could not click cookie consent button (or it wasn't found): Page.wait_for_selector: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all cookies')") to be visible
+
+2025-05-09 23:38:58,607 - INFO - Playwright - Page dimensions: Width=1920, Height=14771
+2025-05-09 23:39:01,220 - INFO - Screenshot saved to screenshots\screenshot_20250509_233852_www.analyticsvidhya.com.png
+2025-05-09 23:39:01,255 - INFO - Closed page for https://www.analyticsvidhya.com/blog/2025/05/computer-use-agents/
+2025-05-09 23:39:01,256 - INFO - Playwright screenshot successful: screenshot_20250509_233852_www.analyticsvidhya.com.png
+2025-05-09 23:39:01,256 - INFO - Uploading screenshot_20250509_233852_www.analyticsvidhya.com.png to Google Drive.
+2025-05-09 23:39:01,647 - INFO - Successfully verified access to folder: AI-Agent
+2025-05-09 23:39:02,082 - INFO - Successfully verified access to folder: AI-Agent
+2025-05-09 23:39:07,512 - INFO - File uploaded successfully: https://drive.google.com/file/d/1fjD5CiuPEdHCOqHxl6gQrHhn3sis6vQW/view?usp=drivesdk
+2025-05-09 23:39:07,512 - INFO - Uploaded screenshot_20250509_233852_www.analyticsvidhya.com.png to https://drive.google.com/file/d/1fjD5CiuPEdHCOqHxl6gQrHhn3sis6vQW/view?usp=drivesdk.
+2025-05-09 23:39:07,904 - INFO - Sheet updated successfully: 1 cells updated
+2025-05-09 23:39:07,904 - INFO - Sheet updated for https://www.analyticsvidhya.com/blog/2025/05/computer-use-agents/ with https://drive.google.com/file/d/1fjD5CiuPEdHCOqHxl6gQrHhn3sis6vQW/view?usp=drivesdk.
+2025-05-09 23:39:07,904 - INFO - Cleaned up local screenshot: screenshots\screenshot_20250509_233852_www.analyticsvidhya.com.png
+2025-05-09 23:39:10,920 - INFO - Processing URL (6/10): https://www.analyticsvidhya.com/blog/2024/07/build-ai-agents-from-scratch/
+2025-05-09 23:39:11,250 - INFO - Attempting to capture screenshot for https://www.analyticsvidhya.com/blog/2024/07/build-ai-agents-from-scratch/ with Playwright.
+2025-05-09 23:39:12,132 - INFO - Navigated to https://www.analyticsvidhya.com/blog/2024/07/build-ai-agents-from-scratch/
+2025-05-09 23:39:17,136 - WARNING - Could not click cookie consent button (or it wasn't found): Page.wait_for_selector: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all cookies')") to be visible
+
+2025-05-09 23:39:17,154 - INFO - Playwright - Page dimensions: Width=1920, Height=20216
+2025-05-09 23:39:20,353 - INFO - Screenshot saved to screenshots\screenshot_20250509_233911_www.analyticsvidhya.com.png
+2025-05-09 23:39:20,366 - INFO - Closed page for https://www.analyticsvidhya.com/blog/2024/07/build-ai-agents-from-scratch/
+2025-05-09 23:39:20,367 - INFO - Playwright screenshot successful: screenshot_20250509_233911_www.analyticsvidhya.com.png
+2025-05-09 23:39:20,367 - INFO - Uploading screenshot_20250509_233911_www.analyticsvidhya.com.png to Google Drive.
+2025-05-09 23:39:20,808 - INFO - Successfully verified access to folder: AI-Agent
+2025-05-09 23:39:21,420 - INFO - Successfully verified access to folder: AI-Agent
+2025-05-09 23:39:29,621 - INFO - File uploaded successfully: https://drive.google.com/file/d/1Vvon_Sfpe2s_Vb4erTdRm2N3R42za_iI/view?usp=drivesdk
+2025-05-09 23:39:29,621 - INFO - Uploaded screenshot_20250509_233911_www.analyticsvidhya.com.png to https://drive.google.com/file/d/1Vvon_Sfpe2s_Vb4erTdRm2N3R42za_iI/view?usp=drivesdk.
+2025-05-09 23:39:30,036 - INFO - Sheet updated successfully: 1 cells updated
+2025-05-09 23:39:30,036 - INFO - Sheet updated for https://www.analyticsvidhya.com/blog/2024/07/build-ai-agents-from-scratch/ with https://drive.google.com/file/d/1Vvon_Sfpe2s_Vb4erTdRm2N3R42za_iI/view?usp=drivesdk.
+2025-05-09 23:39:30,036 - INFO - Cleaned up local screenshot: screenshots\screenshot_20250509_233911_www.analyticsvidhya.com.png
+2025-05-09 23:39:33,042 - INFO - Processing URL (7/10): https://www.analyticsvidhya.com/blog/2024/10/types-of-ai-agents/
+2025-05-09 23:39:33,395 - INFO - Attempting to capture screenshot for https://www.analyticsvidhya.com/blog/2024/10/types-of-ai-agents/ with Playwright.
+2025-05-09 23:39:34,520 - INFO - Navigated to https://www.analyticsvidhya.com/blog/2024/10/types-of-ai-agents/
+2025-05-09 23:39:39,528 - WARNING - Could not click cookie consent button (or it wasn't found): Page.wait_for_selector: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all cookies')") to be visible
+
+2025-05-09 23:39:39,547 - INFO - Playwright - Page dimensions: Width=1920, Height=19049
+2025-05-09 23:39:43,121 - INFO - Screenshot saved to screenshots\screenshot_20250509_233933_www.analyticsvidhya.com.png
+2025-05-09 23:39:43,134 - INFO - Closed page for https://www.analyticsvidhya.com/blog/2024/10/types-of-ai-agents/
+2025-05-09 23:39:43,134 - INFO - Playwright screenshot successful: screenshot_20250509_233933_www.analyticsvidhya.com.png
+2025-05-09 23:39:43,136 - INFO - Uploading screenshot_20250509_233933_www.analyticsvidhya.com.png to Google Drive.
+2025-05-09 23:39:43,516 - INFO - Successfully verified access to folder: AI-Agent
+2025-05-09 23:39:43,895 - INFO - Successfully verified access to folder: AI-Agent
+2025-05-09 23:39:52,152 - INFO - File uploaded successfully: https://drive.google.com/file/d/1omFtgp40V2wvxDvJSO2KLGjzmqdAPusb/view?usp=drivesdk
+2025-05-09 23:39:52,152 - INFO - Uploaded screenshot_20250509_233933_www.analyticsvidhya.com.png to https://drive.google.com/file/d/1omFtgp40V2wvxDvJSO2KLGjzmqdAPusb/view?usp=drivesdk.
+2025-05-09 23:39:52,668 - INFO - Sheet updated successfully: 1 cells updated
+2025-05-09 23:39:52,668 - INFO - Sheet updated for https://www.analyticsvidhya.com/blog/2024/10/types-of-ai-agents/ with https://drive.google.com/file/d/1omFtgp40V2wvxDvJSO2KLGjzmqdAPusb/view?usp=drivesdk.
+2025-05-09 23:39:52,668 - INFO - Cleaned up local screenshot: screenshots\screenshot_20250509_233933_www.analyticsvidhya.com.png
+2025-05-09 23:39:55,682 - INFO - Processing URL (8/10): https://www.analyticsvidhya.com/blog/2025/03/ai-agents-terms/
+2025-05-09 23:39:56,039 - INFO - Attempting to capture screenshot for https://www.analyticsvidhya.com/blog/2025/03/ai-agents-terms/ with Playwright.
+2025-05-09 23:39:57,078 - INFO - Navigated to https://www.analyticsvidhya.com/blog/2025/03/ai-agents-terms/
+2025-05-09 23:40:02,090 - WARNING - Could not click cookie consent button (or it wasn't found): Page.wait_for_selector: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all cookies')") to be visible
+
+2025-05-09 23:40:02,109 - INFO - Playwright - Page dimensions: Width=1920, Height=16533
+2025-05-09 23:40:05,050 - INFO - Screenshot saved to screenshots\screenshot_20250509_233956_www.analyticsvidhya.com.png
+2025-05-09 23:40:05,076 - INFO - Closed page for https://www.analyticsvidhya.com/blog/2025/03/ai-agents-terms/
+2025-05-09 23:40:05,076 - INFO - Playwright screenshot successful: screenshot_20250509_233956_www.analyticsvidhya.com.png
+2025-05-09 23:40:05,076 - INFO - Uploading screenshot_20250509_233956_www.analyticsvidhya.com.png to Google Drive.
+2025-05-09 23:40:05,551 - INFO - Successfully verified access to folder: AI-Agent
+2025-05-09 23:40:06,054 - INFO - Successfully verified access to folder: AI-Agent
+2025-05-09 23:40:11,245 - INFO - File uploaded successfully: https://drive.google.com/file/d/1MRtFCKOypheDeBHr__vWhEduKRkbDqFZ/view?usp=drivesdk
+2025-05-09 23:40:11,245 - INFO - Uploaded screenshot_20250509_233956_www.analyticsvidhya.com.png to https://drive.google.com/file/d/1MRtFCKOypheDeBHr__vWhEduKRkbDqFZ/view?usp=drivesdk.
+2025-05-09 23:40:11,661 - INFO - Sheet updated successfully: 1 cells updated
+2025-05-09 23:40:11,676 - INFO - Sheet updated for https://www.analyticsvidhya.com/blog/2025/03/ai-agents-terms/ with https://drive.google.com/file/d/1MRtFCKOypheDeBHr__vWhEduKRkbDqFZ/view?usp=drivesdk.
+2025-05-09 23:40:11,677 - INFO - Cleaned up local screenshot: screenshots\screenshot_20250509_233956_www.analyticsvidhya.com.png
+2025-05-09 23:40:14,679 - INFO - Processing URL (9/10): https://www.analyticsvidhya.com/blog/2024/12/ai-agents-to-look-out-for/
+2025-05-09 23:40:15,042 - INFO - Attempting to capture screenshot for https://www.analyticsvidhya.com/blog/2024/12/ai-agents-to-look-out-for/ with Playwright.
+2025-05-09 23:40:16,394 - INFO - Navigated to https://www.analyticsvidhya.com/blog/2024/12/ai-agents-to-look-out-for/
+2025-05-09 23:40:21,412 - WARNING - Could not click cookie consent button (or it wasn't found): Page.wait_for_selector: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all cookies')") to be visible
+
+2025-05-09 23:40:21,446 - INFO - Playwright - Page dimensions: Width=1920, Height=12524
+2025-05-09 23:40:24,182 - INFO - Screenshot saved to screenshots\screenshot_20250509_234015_www.analyticsvidhya.com.png
+2025-05-09 23:40:24,203 - INFO - Closed page for https://www.analyticsvidhya.com/blog/2024/12/ai-agents-to-look-out-for/
+2025-05-09 23:40:24,203 - INFO - Playwright screenshot successful: screenshot_20250509_234015_www.analyticsvidhya.com.png
+2025-05-09 23:40:24,203 - INFO - Uploading screenshot_20250509_234015_www.analyticsvidhya.com.png to Google Drive.
+2025-05-09 23:40:24,575 - INFO - Successfully verified access to folder: AI-Agent
+2025-05-09 23:40:25,638 - INFO - Successfully verified access to folder: AI-Agent
+2025-05-09 23:40:30,324 - INFO - File uploaded successfully: https://drive.google.com/file/d/1x-DKLsaQLcUCI93wmJzMllqKFHYnRrEI/view?usp=drivesdk
+2025-05-09 23:40:30,324 - INFO - Uploaded screenshot_20250509_234015_www.analyticsvidhya.com.png to https://drive.google.com/file/d/1x-DKLsaQLcUCI93wmJzMllqKFHYnRrEI/view?usp=drivesdk.
+2025-05-09 23:40:30,762 - INFO - Sheet updated successfully: 1 cells updated
+2025-05-09 23:40:30,762 - INFO - Sheet updated for https://www.analyticsvidhya.com/blog/2024/12/ai-agents-to-look-out-for/ with https://drive.google.com/file/d/1x-DKLsaQLcUCI93wmJzMllqKFHYnRrEI/view?usp=drivesdk.
+2025-05-09 23:40:30,763 - INFO - Cleaned up local screenshot: screenshots\screenshot_20250509_234015_www.analyticsvidhya.com.png
+2025-05-09 23:40:33,764 - INFO - Processing URL (10/10): https://www.analyticsvidhya.com/blog/2024/10/agentic-design-patterns/
+2025-05-09 23:40:34,120 - INFO - Attempting to capture screenshot for https://www.analyticsvidhya.com/blog/2024/10/agentic-design-patterns/ with Playwright.
+2025-05-09 23:40:35,058 - INFO - Navigated to https://www.analyticsvidhya.com/blog/2024/10/agentic-design-patterns/
+2025-05-09 23:40:40,063 - WARNING - Could not click cookie consent button (or it wasn't found): Page.wait_for_selector: Timeout 5000ms exceeded.
+Call log:
+  - waiting for locator("button:has-text('Accept all cookies')") to be visible
+
+2025-05-09 23:40:40,080 - INFO - Playwright - Page dimensions: Width=1920, Height=17144
+2025-05-09 23:40:43,481 - INFO - Screenshot saved to screenshots\screenshot_20250509_234034_www.analyticsvidhya.com.png
+2025-05-09 23:40:43,500 - INFO - Closed page for https://www.analyticsvidhya.com/blog/2024/10/agentic-design-patterns/
+2025-05-09 23:40:43,500 - INFO - Playwright screenshot successful: screenshot_20250509_234034_www.analyticsvidhya.com.png
+2025-05-09 23:40:43,500 - INFO - Uploading screenshot_20250509_234034_www.analyticsvidhya.com.png to Google Drive.
+2025-05-09 23:40:43,871 - INFO - Successfully verified access to folder: AI-Agent
+2025-05-09 23:40:44,237 - INFO - Successfully verified access to folder: AI-Agent
+2025-05-09 23:40:49,449 - INFO - File uploaded successfully: https://drive.google.com/file/d/15vNlBv24joWpFvVv_5Jkl7KY6sHtTnVe/view?usp=drivesdk
+2025-05-09 23:40:49,449 - INFO - Uploaded screenshot_20250509_234034_www.analyticsvidhya.com.png to https://drive.google.com/file/d/15vNlBv24joWpFvVv_5Jkl7KY6sHtTnVe/view?usp=drivesdk.
+2025-05-09 23:40:49,856 - INFO - Sheet updated successfully: 1 cells updated
+2025-05-09 23:40:49,856 - INFO - Sheet updated for https://www.analyticsvidhya.com/blog/2024/10/agentic-design-patterns/ with https://drive.google.com/file/d/15vNlBv24joWpFvVv_5Jkl7KY6sHtTnVe/view?usp=drivesdk.
+2025-05-09 23:40:49,856 - INFO - Cleaned up local screenshot: screenshots\screenshot_20250509_234034_www.analyticsvidhya.com.png
+2025-05-09 23:40:49,856 - INFO - Playwright processing summary: Successful=10, Failed=0, Total=10
+2025-05-09 23:40:49,856 - INFO - --- Playwright Processing Ended ---
+2025-05-09 23:40:49,856 - INFO - Closing Playwright browser.
+2025-05-09 23:40:49,938 - INFO - Stopping Playwright manager.

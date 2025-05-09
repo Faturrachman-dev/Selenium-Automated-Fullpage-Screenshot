@@ -33,10 +33,10 @@ def generate_screenshot_filename(url):
 def process_url(url, row_index, driver, drive_service, sheets_service):
     """Process a single URL with improved error handling"""
     try:
-        # Check if URL has already been processed
+        # Check if URL has already been processed (checks Column C for GDrive Link)
         if gsheet_utils.is_url_processed(sheets_service, SPREADSHEET_ID, row_index):
-            print(f"⏩ Skipping URL (already processed): {url}")
-            logging.info(f"Skipped already processed URL: {url}")
+            print(f"⏩ Skipping URL (GDrive link found): {url}")
+            logging.info(f"Skipped URL (GDrive link found): {url}")
             return True
 
         if not url.strip().startswith(('http://', 'https://')):
@@ -44,7 +44,10 @@ def process_url(url, row_index, driver, drive_service, sheets_service):
             logging.error(f"Invalid URL format: {url}")
             return False
 
-        metadata_range = f'Sheet1!B{row_index + 2}:D{row_index + 2}'
+        # metadata_range will now point to Column C for the GDrive link
+        # Assumes URL is in B, GDrive link to be written in C. row_index is 0-based.
+        # Sheet data (actual URLs) start at row 2.
+        metadata_range = f'Sheet1!C{row_index + 2}'
         screenshot_filename = generate_screenshot_filename(url)
         screenshot_path = os.path.join(SCREENSHOTS_DIR, screenshot_filename)
         
@@ -69,16 +72,16 @@ def process_url(url, row_index, driver, drive_service, sheets_service):
                 file_metadata = gdrive_utils.get_file_metadata(drive_service, file_id)
                 print(f"✅ Uploaded to Drive: {web_link}")
                 
-                # Update sheet
-                print("📝 Updating Google Sheet...")
-                metadata = [[page_title, web_link, file_metadata.get('thumbnailLink', '')]]
+                # Update sheet with only the GDrive web_link
+                print("📝 Updating Google Sheet with GDrive link...")
+                metadata = [[web_link]]
                 gsheet_utils.update_metadata(
                     sheets_service,
                     SPREADSHEET_ID,
                     metadata_range,
                     metadata
                 )
-                print("✅ Sheet updated successfully")
+                print("✅ Sheet updated successfully with GDrive link")
                 
                 # Cleanup
                 if os.path.exists(screenshot_path):

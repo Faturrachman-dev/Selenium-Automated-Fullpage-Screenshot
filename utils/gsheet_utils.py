@@ -32,19 +32,22 @@ def validate_range(range_name):
         return False
 
 def is_url_processed(service, spreadsheet_id, row_index):
-    """Check if URL already has metadata filled in the spreadsheet"""
+    """Check if URL already has a GDrive link filled in the spreadsheet."""
     try:
-        metadata_range = f'Sheet1!B{row_index + 2}:D{row_index + 2}'
+        # Assuming URLs are in column B, GDrive links will be in column C.
+        # row_index is 0-based index from the list of URLs read from column B.
+        # Sheet data starts at row 2 (header is row 1).
+        metadata_range = f'Sheet1!C{row_index + 2}'
         result = service.spreadsheets().values().get(
             spreadsheetId=spreadsheet_id,
             range=metadata_range
         ).execute()
         
         values = result.get('values', [])
-        # Check if we have all three metadata columns filled (title, link, thumbnail)
-        return bool(values and len(values[0]) == 3 and all(values[0]))
+        # Check if the cell in Column C for this row has a value (i.e., GDrive link is present)
+        return bool(values and values[0] and values[0][0])
     except Exception as e:
-        logging.error(f"Error checking URL processing status: {str(e)}")
+        logging.error(f"Error checking URL processing status (GDrive link): {str(e)}")
         return False
 
 def read_urls(service, spreadsheet_id, range_name):

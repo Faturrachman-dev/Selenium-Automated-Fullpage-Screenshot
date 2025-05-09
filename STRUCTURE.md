@@ -8,8 +8,8 @@
         └── selenium_utils.py
         └── url_tracker.py
     └── .env
+    └── .env.example
     └── .gitignore
-    └── a.md
     └── ARCHITECTURE.md
     └── cookies.json
     └── credentials.json
