@@ -198,7 +198,7 @@ def capture_full_page_screenshot(driver, url, output_path):
             print(f"📏 Page height ({preliminary_height}px) allows for simpler screenshot method.")
             
             # Prepare page (minimal version for direct screenshot)
-            driver.execute_script("""
+        driver.execute_script("""
                 document.querySelectorAll('img[loading="lazy"]').forEach(img => {{
                     img.loading = 'eager';
                     img.src = img.src;
@@ -275,7 +275,7 @@ def capture_full_page_screenshot(driver, url, output_path):
             print("📸 Capturing screenshot using CDP Page.captureScreenshot...")
             metrics = driver.execute_cdp_cmd("Page.getLayoutMetrics", {})
             content_width = math.ceil(metrics['contentSize']['width'])
-            
+        
             # New JavaScript to find the bottom-most visible element's position
             final_content_height_script = """
                 const BORDERLINE_NODE_TYPES = [
@@ -339,14 +339,14 @@ def capture_full_page_screenshot(driver, url, output_path):
             except Exception as e_cdp:
                 logging.warning(f"CDP Page.captureScreenshot failed: {str(e_cdp)}. Falling back to body/save_screenshot.")
                 # Fallback mechanism if CDP Page.captureScreenshot fails
-                try:
-                    body = driver.find_element(By.TAG_NAME, 'body')
-                    body.screenshot(output_path)
+        try:
+            body = driver.find_element(By.TAG_NAME, 'body')
+            body.screenshot(output_path)
                     print("✅ Captured using body element method (CDP direct fallback)")
                     logging.info("Screenshot captured using body element method (CDP direct fallback)")
                 except Exception as e_body_cdp_fallback:
                     logging.warning(f"Body capture failed (CDP direct fallback), using driver.save_screenshot: {str(e_body_cdp_fallback)}")
-                    driver.save_screenshot(output_path)
+            driver.save_screenshot(output_path)
                     print("✅ Captured using driver.save_screenshot (CDP ultimate fallback)")
                     logging.info("Screenshot captured using driver.save_screenshot (CDP ultimate fallback)")
         # --- End Conditional Screenshot Logic ---
